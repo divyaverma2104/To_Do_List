@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder Tasks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Comic Neue', cursive;
+            display: flex;
+            background-image: url('https://www.hdwallpapers.in/download/tree_hills_pond_reflection_dark_blue_sky_background_4k_hd_dark_background-HD.jpg');
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            background-size: cover;
+            background-repeat: no-repeat;
+            padding: 20px;
+        }
+        .task-container {
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            background: rgba(60, 60, 60, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 1);
+            text-align: center;
+            margin-bottom: 30px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            animation: rainbowBorder 5s linear infinite;
+            position: relative;
+        }
+        @keyframes rainbowBorder {
+            0% {
+                border-color: rgb(116, 33, 33);
+            }
+            14% {
+                border-color: orange;
+            }
+            28% {
+                border-color: rgb(199, 199, 52);
+            }
+            42% {
+                border-color: rgb(80, 196, 80);
+            }
+            57% {
+                border-color: rgb(123, 123, 199);
+            }
+            71% {
+                border-color: rgb(92, 72, 107);
+            }
+            85% {
+                border-color: violet;
+            }
+            100% {
+                border-color: rgb(177, 97, 97);
+            }
+        }
+        h1 {
+            color: #d4dee9;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-family: 'Comic Neue', cursive;
+            font-weight: 700;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        ul li {
+            background-color: #2b2828;
+            padding: 12px;
+            margin: 5px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            transition: transform 0.3s, background-color 0.3s;
+            color: #f0f0f0;
+            text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        }
+        ul li:hover {
+            background-color: #3a3333;
+            transform: scale(1.02);
+        }
+        .delete-sticker {
+            color: #ea0000;
+            font-size: 22px;
+            cursor: pointer;
+            background-color: #2b2828;
+            transition: transform 0.3s color0.3s;
+        }
+        .delete-sticker:hover {
+            color: #ea0000;
+            transform: rotate(15deg) scale(1.3);
+            transition: transform 0.3s, color 0.3s;
+        }
+        .important-sticker {
+            color: #d5a11f;
+            font-size: 22px;
+            cursor: pointer;
+            background-color: #2b2828;
+            transition: transform 0.3s;
+        }
+        ul li .important-sticker:hover {
+            color: #f9db19;
+            transform: rotate(15deg) scale(1.3);
+        }
+        .extra-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: space-around;
+            border-radius: 50%;
+        }
+        .extra-buttons a {
+            text-decoration: none;
+        }
+        .extra-buttons .icon-button {
+            background-color: #bb6809;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            border-radius: 50%;
+        }
+        .extra-buttons .icon-button:hover {
+            background-color: #ff8800;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ffffff;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            font-size: 20px;
+            opacity: 0.9;
+            transition: opacity 0.6s ease;
+        }
+        #reminder-controls {
+            display: none;
+        }
+       
+        .close-button {
+            font-size: 18px;
+            color: white;
+            background-color: #cf525f;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition: background-color 0.3s;
+        }
+        .close-button:hover {
+            background-color: #bd1a2a;
+        }
+        
+        @media (max-width: 1200px) {
+    .task-container {
+        max-width: 80%;
+        padding: 15px;
+    }
+    ul li {
+        font-size: 0.95rem;
+    }
+    .extra-buttons .icon-button {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    .filter-buttons button {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}
+@media (max-width: 768px) {
+    body {
+        padding: 0 10px;
+    }
+    .task-container {
+        max-width: 90%;
+        padding: 10px;
+    }
+    ul li {
+        font-size: 0.9rem;
+    }
+    .extra-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .extra-buttons .icon-button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    .filter-buttons button {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+}
+@media (max-width: 480px) {
+    .task-container {
+        padding: 8px;
+        max-width: 95%;
+    }
+    ul li {
+        font-size: 0.85rem;
+    }
+    .extra-buttons .icon-button {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    .filter-buttons button {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="task-container">
+        <h1>Reminder Tasks</h1>
+        <ul id="remainderList"></ul>
+        <div id="reminder-controls" style="display: none; position: relative;">
+            <button id="close" class="close-button" onclick="closeReminderContainer()"><i
+                    class="fas fa-times"></i></button>
+            <h2>Set Reminder</h2>
+            <input type="date" id="reminder-date">
+            <input type="time" id="reminder-time">
+            <button onclick="setReminder()">Save Reminder</button>
+        </div>
+    </div>
+    <div class="extra-buttons">
+        <a href="index3.html"><button class="icon-button"><i class="fas fa-notes-medical"></i></button></a>
+    </div>
+    <audio id="buzzer" preload="auto">
+        <source src="WhatsApp Audio 2024-08-09 at 9.51.43 PM.mpeg" type="audio/mp3">
+    </audio>
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let taskIdToMark;
+        let reminderTimeouts = []; // Store timeouts to manage reminders
+        function loadRemainders() {
+            const remainderList = document.getElementById('remainderList');
+            remainderList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                if (task.reminder) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                <span>${task.text} - ${new Date(task.reminder).toLocaleString()}</span>
+                <div>
+                    <button class="delete-sticker" onclick="deleteTask(${index})"><i class="fas fa-trash-alt"></i></button>
+                    <button class="important-sticker" onclick="showReminderContainer(${index})"><i class="fas fa-calendar-day"></i></button>
+                </div>
+            `;
+                    remainderList.appendChild(li);
+                }
+            });
+        }
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            loadRemainders();
+            clearReminders(); // Clear reminders when tasks are deleted
+        }
+        function showReminderContainer(index) {
+            taskIdToMark = index;
+            document.getElementById('reminder-controls').style.display = 'block';
+        }
+        function closeReminderContainer() {
+            document.getElementById('reminder-controls').style.display = 'none';
+        }
+        function setReminder() {
+            const date = document.getElementById('reminder-date').value;
+            const time = document.getElementById('reminder-time').value;
+            if (date && time && taskIdToMark !== undefined) {
+                const reminderTime = new Date(`${date}T${time}`).getTime();
+                tasks[taskIdToMark].reminder = new Date(reminderTime).toISOString();
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                document.getElementById('reminder-controls').style.display = 'none';
+                loadRemainders();
+                manageReminders(); // Set new reminders
+            }
+        }
+        function manageReminders() {
+            clearReminders(); // Clear existing reminders
+            const now = Date.now();
+            tasks.forEach((task, index) => {
+                if (task.reminder) {
+                    const reminderTime = new Date(task.reminder).getTime();
+                    if (reminderTime > now) {
+                        const timeUntilReminder = reminderTime - now;
+                        // Set reminders for 5 minutes, 3 minutes, and at the time
+                        if (timeUntilReminder > 5 * 60 * 1000) {
+                            const fiveMinuteReminder = timeUntilReminder - 5 * 60 * 1000;
+                            reminderTimeouts.push(setTimeout(() => {
+                                showNotification("Reminder: Your session is starting in 5 minutes!");
+                                playBuzzer();
+                            }, fiveMinuteReminder));
+                        }
+                        if (timeUntilReminder > 3 * 60 * 1000) {
+                            const threeMinuteReminder = timeUntilReminder - 3 * 60 * 1000;
+                            reminderTimeouts.push(setTimeout(() => {
+                                showNotification("Reminder: Your session is starting in 3 minutes!");
+                                playBuzzer();
+                            }, threeMinuteReminder));
+                        }
+                        // Reminder at the exact time
+                        reminderTimeouts.push(setTimeout(() => {
+                            showNotification("Reminder: Your session is starting now!");
+                            playBuzzer();
+                            deleteTask(index);// at time task has delete
+                        }, timeUntilReminder));
+                    }
+                }
+            });
+        }
+        function clearReminders() {
+            reminderTimeouts.forEach(timeout => clearTimeout(timeout));
+            reminderTimeouts = [];
+        }
+        function playBuzzer() {
+            const buzzer = document.getElementById('buzzer');
+            if (buzzer) {
+                buzzer.play().catch(error => {
+                    console.error('Error playing buzzer sound:', error);
+                });
+            } else {
+                console.error('Buzzer element not found!');
+            }
+        }
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerText = message;
+            document.body.appendChild(notification);
+            // Remove the notification after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+        loadRemainders();
+        manageReminders(); // Call to set initial reminders
+    </script>
+</body>
+</html>
